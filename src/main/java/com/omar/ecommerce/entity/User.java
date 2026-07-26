@@ -1,10 +1,12 @@
 package com.omar.ecommerce.entity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.UUID;
 
 @Entity
@@ -35,7 +37,7 @@ public class User {
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
 
-    @Column(name="role",nullable = false)
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 }

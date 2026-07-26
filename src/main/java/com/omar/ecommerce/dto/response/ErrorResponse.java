@@ -8,6 +8,5 @@ public record ErrorResponse(
         int status,
         String error,
         String message,
-        List<FieldErrorDetail> errors,
-        String path
+        List<FieldErrorDetail> errors
 ) {}

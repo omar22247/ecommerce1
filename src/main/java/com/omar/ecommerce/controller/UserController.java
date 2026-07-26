@@ -25,9 +25,5 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success("User retrieved successfully", user));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<UserResponseDto>> register(@Valid @RequestBody UserRegisterRequest request) {
-        UserResponseDto user = userService.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("User registered successfully", user));
-    }
+
 }

@@ -1,6 +1,6 @@
 package com.omar.ecommerce.mapper;
 
-
+import com.omar.ecommerce.dto.request.RegisterRequest;
 import com.omar.ecommerce.dto.request.UserRegisterRequest;
 import com.omar.ecommerce.dto.response.UserResponseDto;
 import com.omar.ecommerce.entity.User;
