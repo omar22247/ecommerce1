@@ -8,8 +8,13 @@ import java.util.UUID;
 
 public class ProductSpecifications {
     public static Specification<Product> hasCategory(UUID categoryId) {
-        return (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.equal(root.get("category").get("id"), categoryId);
+        return (root, query, cb) -> {
+            if (categoryId == null) {
+                return cb.conjunction();
+            }
+
+            return cb.equal(root.get("category").get("id"), categoryId);
+        };
     }
     public static Specification<Product> isActive() {
         return (root, criteriaQuery, criteriaBuilder)

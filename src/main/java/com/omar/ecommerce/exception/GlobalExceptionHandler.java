@@ -24,7 +24,10 @@ public class GlobalExceptionHandler {
 //        return ResponseEntity.status(HttpStatus.FORBIDDEN)
 //                .body(ApiResponse.error("You do not have permission to perform this action"));
 //    }
-
+@ExceptionHandler(InsufficientStockException.class)
+public ResponseEntity<ApiResponse<Object>> handleInsufficientStock(InsufficientStockException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(ex.getMessage()));
+}
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ApiResponse<Object>> handleDuplicate(DuplicateResourceException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)

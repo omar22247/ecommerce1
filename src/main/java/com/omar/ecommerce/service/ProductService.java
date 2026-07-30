@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface ProductService {
@@ -14,4 +15,5 @@ public interface ProductService {
     ProductResponse createProduct(ProductRequest productRequest);
     ProductResponse updateProduct(UUID id, ProductRequest productRequest);
     void deleteProduct(UUID id);
+    Page<ProductResponse> searchProducts(UUID categoryId, BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable);
 }
