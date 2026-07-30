@@ -1,6 +1,7 @@
 package com.omar.ecommerce.controller;
 
 import com.omar.ecommerce.dto.request.AddToCartRequest;
+import com.omar.ecommerce.dto.request.UpdateCartItemRequest;
 import com.omar.ecommerce.dto.response.ApiResponse;
 import com.omar.ecommerce.dto.response.CartResponse;
 import com.omar.ecommerce.security.AuthenticatedUser;
@@ -9,14 +10,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/cart2")
+@RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
 public class CartController {
 
@@ -34,5 +33,20 @@ public class CartController {
             @Valid @RequestBody AddToCartRequest request) {
         CartResponse cart = cartService.addItemToCart(user.userId(), request);
         return ResponseEntity.ok(ApiResponse.success("Item added to cart successfully", cart));
+    }
+    @DeleteMapping("/me/items/{cartItemId}")
+    public ResponseEntity<ApiResponse<CartResponse>> removeItem(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @PathVariable Long cartItemId) {
+        CartResponse cart = cartService.removeItemFromCart(user.userId(), cartItemId);
+        return ResponseEntity.ok(ApiResponse.success("Item removed from cart successfully", cart));
+    }
+    @PutMapping("/me/items/{cartItemId}")
+    public ResponseEntity<ApiResponse<CartResponse>> updateQuantity(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @PathVariable Long cartItemId,
+            @Valid @RequestBody UpdateCartItemRequest request) {
+        CartResponse cart = cartService.updateCartItemQuantity(user.userId(), cartItemId, request);
+        return ResponseEntity.ok(ApiResponse.success("Cart item quantity updated successfully", cart));
     }
 }
