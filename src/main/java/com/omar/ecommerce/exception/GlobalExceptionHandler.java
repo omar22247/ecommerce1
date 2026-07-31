@@ -68,6 +68,12 @@ public ResponseEntity<ApiResponse<Object>> handleInsufficientStock(InsufficientS
                 .body(ApiResponse.error("The requested resource was not found"));
     }
 
+    @ExceptionHandler(InvalidOrderException.class)
+    public ResponseEntity<ApiResponse<Object>> handleInvalidOrder(InvalidOrderException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiResponse<Object>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
