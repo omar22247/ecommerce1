@@ -16,10 +16,6 @@ public enum OrderStatus {
             return false;
         }
 
-        if (this == target) {
-            return true;
-        }
-
         return switch (this) {
             case PENDING ->
                     target == CONFIRMED || target == CANCELLED;
@@ -42,7 +38,7 @@ public enum OrderStatus {
     }
 
     public boolean isFinal() {
-              return this == CANCELLED
+        return this == CANCELLED
                 || this == REFUNDED;
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -79,24 +80,34 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(order) ;
     }
 
-    @Override
     @Transactional
+    @Override
     public OrderResponse cancelOrder(UUID userId, UUID orderId) {
-        Order order=orderRepository.findById(orderId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Order not found with id: " + orderId));
+        Order order = orderRepository.findByIdWithItemsAndProducts(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+
         if (!order.getUser().getId().equals(userId)) {
             throw new AccessDeniedException("Order does not belong to the user.");
         }
+
         if (!order.getStatus().canTransitionTo(OrderStatus.CANCELLED)) {
             throw new InvalidOrderException(
                     "Order cannot be cancelled from its current status: " + order.getStatus());
         }
 
+        restoreStock(order);
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
-        return null;
+
+        return orderMapper.toDto(order);
+    }
+
+    private void restoreStock(Order order) {
+
+        for (OrderItem orderItem : order.getItems()) {
+            Product product = orderItem.getProduct();
+            product.setStockQuantity(product.getStockQuantity() + orderItem.getQuantity());
+        }
     }
 
     private Order buildOrder(Cart cart, Address address) {
@@ -163,4 +174,5 @@ public class OrderServiceImpl implements OrderService {
 
         return item;
     }
+
 }
